@@ -5,36 +5,35 @@
 package org.aoeu.jgames.gofl;
 
 /**
- *
  * @author Luis Martín Canaval Sánchez
  */
-public class Gofl {
-    
+public class GameOfLife {
+
     boolean[][] cells;
     boolean[][] prevGen;
-    
+
     int width;
     int height;
 
-    public Gofl(int width, int hieght) {
+    GameOfLife(int width, int height) {
         this.width = width;
-        this.height = hieght;
-        this.cells = new boolean[width][hieght];
-        this.prevGen = new boolean[width][hieght];
+        this.height = height;
+        this.cells = new boolean[width][height];
+        this.prevGen = new boolean[width][height];
     }
 
-    public int getWidth() {
+    int getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    int getHeight() {
         return height;
     }
-    
+
     void toggleCell(int i, int j) {
         cells[i][j] = !cells[i][j];
     }
-    
+
     boolean[][] getCells() {
         return cells;
     }
@@ -43,12 +42,12 @@ public class Gofl {
         boolean[][] temp = cells;
         cells = prevGen;
         prevGen = temp;
-        for(int i = 0; i < width; i++) {
-            for(int j = 0; j < height; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 byte n = neighbors(i, j);
                 boolean prev = prevGen[i][j];
                 boolean val = false;
-                if(n == 3 || (prev && n == 2)) {
+                if (n == 3 || (prev && n == 2)) {
                     val = true;
                 }
                 cells[i][j] = val;
@@ -61,7 +60,7 @@ public class Gofl {
         byte count = 0;
         int nji = j == 0 ? height - 1 : j - 1;
         int njf = j == height - 1 ? 0 : j + 1;
-        for(int p = i - 1; p <= i + 1; p++) {
+        for (int p = i - 1; p <= i + 1; p++) {
             int ni = p < 0 ? width - 1 : p == width ? 0 : p;
             count += (prevGen[ni][nji] ? 1 : 0) + (prevGen[ni][njf] ? 1 : 0);
         }

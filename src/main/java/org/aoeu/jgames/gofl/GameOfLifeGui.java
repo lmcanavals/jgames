@@ -4,62 +4,64 @@
  */
 package org.aoeu.jgames.gofl;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
- *
  * @author Luis Martín Canaval Sánchez
  */
-public class GoflGui extends JFrame {
+public class GameOfLifeGui extends JFrame {
 
-    static final int GOFL_WIDTH = 100;
-    static final int GOFL_HEIGHT = 70;
-    Gofl gofl;
-    GoflCanvas goflCanvas;
-    boolean paused = true;
+    static final int WORLD_WIDTH = 100;
+    static final int WORLD_HEIGHT = 70;
+    GameOfLife gameOfLife;
+    GameOfLifePanel gameOfLifeCanvas;
+    boolean running;
+    boolean forever;
 
-    public void ejecutar() {
+    void start() {
         setTitle("El juego de la vida");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        gofl = new Gofl(GOFL_WIDTH, GOFL_HEIGHT);
-        goflCanvas = new GoflCanvas(gofl);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        gameOfLife = new GameOfLife(WORLD_WIDTH, WORLD_HEIGHT);
+        gameOfLifeCanvas = new GameOfLifePanel(gameOfLife);
         setVisible(true);
-        getContentPane().add(goflCanvas);
+        getContentPane().add(gameOfLifeCanvas);
         pack();
         setResizable(false);
-        goflCanvas.addMouseListener(new MouseAdapter() {
+        gameOfLifeCanvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int scale = goflCanvas.getScale();
-                gofl.toggleCell(e.getX() / scale, e.getY() / scale);
-                goflCanvas.repaint();
+                int scale = gameOfLifeCanvas.getScale();
+                gameOfLife.toggleCell(e.getX() / scale, e.getY() / scale);
+                gameOfLifeCanvas.repaint();
             }
         });
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyChar() == 't') {
-                    paused = !paused;
+                    running = !running;
                 }
             }
         });
         new Thread(new Runnable() {
             public synchronized void run() {
-                while (true) {
+                forever = true;
+                while (forever) {
                     try {
-                        while (paused) {
+                        while (!running) {
                             wait(10);
                         }
                         wait(250);
-                    } catch (InterruptedException ex) {
+                    } catch (InterruptedException ignored) {
                     }
-                    gofl.nextGeneration();
-                    goflCanvas.repaint();
+                    gameOfLife.nextGeneration();
+                    gameOfLifeCanvas.repaint();
                 }
             }
         }).start();
