@@ -1,7 +1,3 @@
-/*
- * 01010011 01100001 01101101 01110000 01101100 01100101 
- * 01000011 01101111 01100100 01100101 00100001
- */
 package org.aoeu.jgames.gofl;
 
 import javax.swing.JPanel;
@@ -14,41 +10,40 @@ import java.awt.Graphics;
  */
 public class GameOfLifePanel extends JPanel {
 
-    GameOfLife gameOfLife;
-    int scale = 10;
+    GameOfLife gol;
+    int scale;
 
-    GameOfLifePanel(GameOfLife gameOfLife) {
-        this.gameOfLife = gameOfLife;
+    GameOfLifePanel(GameOfLife gol, int scale) {
+        this.gol = gol;
+        this.scale = scale;
         this.setPreferredSize(new Dimension(
-                gameOfLife.getWidth() * scale + 1,
-                gameOfLife.getHeight() * scale + 1));
+                gol.getWidth() * scale + 1,
+                gol.getHeight() * scale + 1));
         this.setOpaque(true);
         this.setBackground(Color.darkGray);
-    }
-
-    int getScale() {
-        return scale;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        boolean[][] cells = gameOfLife.getCells();
-        int width = gameOfLife.getWidth();
-        int height = gameOfLife.getHeight();
+        byte[][] cells = gol.getCells();
+        int worldWidth = gol.getWidth();
+        int worldHeight = gol.getHeight();
+        int panelWidth = getWidth();
+        int panelHeight = getHeight();
         g.setColor(Color.gray);
-        for (int i = 0; i < getWidth(); i += scale) {
-            g.drawLine(i, 0, i, this.getHeight());
+        for (int i = 0; i < panelWidth; i += scale) {
+            g.drawLine(i, 0, i, panelHeight);
         }
-        for (int j = 0; j < getHeight() + 1; j += scale) {
-            g.drawLine(0, j, this.getWidth() + 1, j);
+        for (int j = 0; j < panelHeight; j += scale) {
+            g.drawLine(0, j, panelWidth, j);
         }
         g.setColor(Color.green);
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                if (cells[i][j]) {
-                    g.fillRect(i * scale + 1, j * scale + 1,
-                            scale - 1, scale - 1);
+        final int side = scale - 1;
+        for (int i = 0; i < worldWidth; i++) {
+            for (int j = 0; j < worldHeight; j++) {
+                if (cells[i][j] == 1) {
+                    g.fillRect(i * scale + 1, j * scale + 1, side, side);
                 }
             }
         }

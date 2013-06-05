@@ -19,26 +19,28 @@ public class GameOfLifeGui extends JFrame {
 
     static final int WORLD_WIDTH = 100;
     static final int WORLD_HEIGHT = 70;
-    GameOfLife gameOfLife;
-    GameOfLifePanel gameOfLifeCanvas;
+    static final int WORLD_SCALE = 10;
+
+    int delay = 250;
+    GameOfLife gol;
+    GameOfLifePanel golCanvas;
     boolean running;
     boolean forever;
 
     void start() {
         setTitle("El juego de la vida");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        gameOfLife = new GameOfLife(WORLD_WIDTH, WORLD_HEIGHT);
-        gameOfLifeCanvas = new GameOfLifePanel(gameOfLife);
+        gol = new GameOfLife(WORLD_WIDTH, WORLD_HEIGHT);
+        golCanvas = new GameOfLifePanel(gol, WORLD_SCALE);
         setVisible(true);
-        getContentPane().add(gameOfLifeCanvas);
+        getContentPane().add(golCanvas);
         pack();
         setResizable(false);
-        gameOfLifeCanvas.addMouseListener(new MouseAdapter() {
+        golCanvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int scale = gameOfLifeCanvas.getScale();
-                gameOfLife.toggleCell(e.getX() / scale, e.getY() / scale);
-                gameOfLifeCanvas.repaint();
+                gol.toggleCell(e.getX() / WORLD_SCALE, e.getY() / WORLD_SCALE);
+                golCanvas.repaint();
             }
         });
         this.addKeyListener(new KeyAdapter() {
@@ -57,11 +59,11 @@ public class GameOfLifeGui extends JFrame {
                         while (!running) {
                             wait(10);
                         }
-                        wait(250);
+                        wait(delay);
                     } catch (InterruptedException ignored) {
                     }
-                    gameOfLife.nextGeneration();
-                    gameOfLifeCanvas.repaint();
+                    gol.nextGeneration();
+                    golCanvas.repaint();
                 }
             }
         }).start();
