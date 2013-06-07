@@ -1,6 +1,8 @@
 package org.aoeu.jgames.snake;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -9,11 +11,11 @@ import java.awt.event.KeyEvent;
  */
 public class SnakeGui extends JFrame {
 
-    static final int WORLD_WIDTH = 100;
-    static final int WORLD_HEIGHT = 70;
-    static final int WORLD_SCALE = 10;
+    static final int WORLD_WIDTH = 50;
+    static final int WORLD_HEIGHT = 35;
+    static final int WORLD_SCALE = 20;
     static final String TITLE = "Un Snake Super Simple";
-    int delay = 250;
+    int delay = 150;
     Snake snake;
     SnakePanel snakePanel;
     boolean gameOver;
@@ -22,8 +24,7 @@ public class SnakeGui extends JFrame {
     void start() {
         setTitle(TITLE);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        snake = new Snake();
-        snake.initializeSnake(WORLD_WIDTH, WORLD_HEIGHT);
+        snake = new Snake(WORLD_WIDTH, WORLD_HEIGHT);
         snakePanel = new SnakePanel(snake, WORLD_SCALE);
         getContentPane().add(snakePanel);
         pack();
@@ -31,33 +32,27 @@ public class SnakeGui extends JFrame {
         setVisible(true);
         this.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                switch (e.getKeyChar()) {
-                    case 'p':
-                    case 'P':
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_P:
                         running = !running;
                         break;
-                    case 'n':
-                    case 'N':
+                    case KeyEvent.VK_N:
                         JOptionPane.showMessageDialog(
                                 null, "Nuevo juego!",
                                 TITLE, JOptionPane.INFORMATION_MESSAGE);
                         newGame();
                         break;
-                    case 'a':
-                    case 'A':
+                    case KeyEvent.VK_LEFT:
                         snake.goLeft();
                         break;
-                    case 's':
-                    case 'S':
+                    case KeyEvent.VK_DOWN:
                         snake.goDown();
                         break;
-                    case 'd':
-                    case 'D':
+                    case KeyEvent.VK_RIGHT:
                         snake.goRight();
                         break;
-                    case 'w':
-                    case 'W':
+                    case KeyEvent.VK_UP:
                         snake.goUp();
                         break;
                 }
@@ -90,7 +85,7 @@ public class SnakeGui extends JFrame {
                     wait(delay);
                 } catch (InterruptedException ignored) {
                 }
-                if (snake.isDead()) {
+                if (snake.isDead) {
                     JOptionPane.showMessageDialog(
                             null, "Ouch! suerte para la próxima.",
                             TITLE, JOptionPane.WARNING_MESSAGE);

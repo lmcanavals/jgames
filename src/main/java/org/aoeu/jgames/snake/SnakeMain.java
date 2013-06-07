@@ -1,6 +1,6 @@
 package org.aoeu.jgames.snake;
 
-import java.awt.*;
+import java.awt.EventQueue;
 
 /**
  * @author Luis Martín Canaval Sánchez

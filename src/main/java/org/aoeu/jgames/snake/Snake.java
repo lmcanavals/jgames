@@ -9,39 +9,17 @@ public class Snake {
 
     int[] snakeX;
     int[] snakeY;
+    int appleX;
+    int appleY;
     int worldWidth;
     int worldHeight;
     int maxBodyLength;
     int bodyLength;
     int start;
-    boolean dead;
+    boolean isDead;
     Direction direction;
 
-    public int getX(int i) {
-        return snakeX[start + i % maxBodyLength];
-    }
-
-    public int getY(int i) {
-        return snakeY[start + i % maxBodyLength];
-    }
-
-    public int getWorldWidth() {
-        return worldWidth;
-    }
-
-    public int getWorldHeight() {
-        return worldHeight;
-    }
-
-    public int getBodyLength() {
-        return bodyLength;
-    }
-
-    public boolean isDead() {
-        return dead;
-    }
-
-    void initializeSnake(int worldWidth, int worldHeight) {
+    Snake(int worldWidth, int worldHeight) {
         this.worldWidth = worldWidth;
         this.worldHeight = worldHeight;
         maxBodyLength = worldHeight * worldWidth;
@@ -59,23 +37,8 @@ public class Snake {
         snakeX[2] = 3;
         snakeY[2] = 1;
         direction = Direction.RIGHT;
-        dead = false;
-    }
-
-    void goLeft() {
-        direction = direction != Direction.RIGHT ? Direction.LEFT : direction;
-    }
-
-    void goRight() {
-        direction = direction != Direction.LEFT ? Direction.RIGHT : direction;
-    }
-
-    void goUp() {
-        direction = direction != Direction.DOWN ? Direction.UP : direction;
-    }
-
-    void goDown() {
-        direction = direction != Direction.UP ? Direction.DOWN : direction;
+        isDead = false;
+        newApple();
     }
 
     boolean step() {
@@ -99,7 +62,42 @@ public class Snake {
                 snakeY[head] = snakeY[neck] - 1;
                 break;
         }
-        start++;
-        return dead;
+        if (snakeX[head] == appleX && snakeY[head] == appleY) {
+            newApple();
+            bodyLength++;
+        } else {
+            start++;
+        }
+        return isDead;
     }
+
+    void newApple() {
+        appleX = (int) (Math.random() * worldWidth);
+        appleY = (int) (Math.random() * worldHeight);
+    }
+
+    void goLeft() {
+        direction = direction != Direction.RIGHT ? Direction.LEFT : direction;
+    }
+
+    void goRight() {
+        direction = direction != Direction.LEFT ? Direction.RIGHT : direction;
+    }
+
+    void goUp() {
+        direction = direction != Direction.DOWN ? Direction.UP : direction;
+    }
+
+    void goDown() {
+        direction = direction != Direction.UP ? Direction.DOWN : direction;
+    }
+
+    public int getX(int i) {
+        return snakeX[start + i % maxBodyLength];
+    }
+
+    public int getY(int i) {
+        return snakeY[start + i % maxBodyLength];
+    }
+
 }
