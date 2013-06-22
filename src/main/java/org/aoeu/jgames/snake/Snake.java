@@ -3,21 +3,21 @@ package org.aoeu.jgames.snake;
 /**
  * @author Luis Martín Canaval Sánchez
  */
-public class Snake {
+class Snake {
 
-    enum Direction {LEFT, RIGHT, UP, DOWN}
+    private enum Direction {LEFT, RIGHT, UP, DOWN}
 
-    int[] snakeX;
-    int[] snakeY;
-    int appleX;
-    int appleY;
-    int worldWidth;
-    int worldHeight;
-    int maxBodyLength;
-    int bodyLength;
-    int start;
-    boolean isDead;
-    Direction direction;
+    private int[] snakeX;
+    private int[] snakeY;
+    private int appleX;
+    private int appleY;
+    private int worldWidth;
+    private int worldHeight;
+    private int maxBodyLength;
+    private int bodyLength;
+    private int start;
+    private boolean dead;
+    private Direction direction;
 
     Snake(int worldWidth, int worldHeight) {
         this.worldWidth = worldWidth;
@@ -37,29 +37,34 @@ public class Snake {
         snakeX[2] = 3;
         snakeY[2] = 1;
         direction = Direction.RIGHT;
-        isDead = false;
+        dead = false;
         newApple();
     }
 
     boolean step() {
         int head = start + bodyLength;
         int neck = start + bodyLength - 1;
+        int newX, newY;
         switch (direction) {
             case LEFT:
-                snakeX[head] = snakeX[neck] - 1;
+                newX = snakeX[neck] - 1;
+                snakeX[head] = newX < 0 ? worldWidth - 1 : newX;
                 snakeY[head] = snakeY[neck];
                 break;
             case DOWN:
                 snakeX[head] = snakeX[neck];
-                snakeY[head] = snakeY[neck] + 1;
+                newY = snakeY[neck] + 1;
+                snakeY[head] = newY >= worldHeight ? 0 : newY;
                 break;
             case RIGHT:
-                snakeX[head] = snakeX[neck] + 1;
+                newX = snakeX[neck] + 1;
+                snakeX[head] = newX >= worldWidth ? 0 : newX;
                 snakeY[head] = snakeY[neck];
                 break;
             case UP:
                 snakeX[head] = snakeX[neck];
-                snakeY[head] = snakeY[neck] - 1;
+                newY = snakeY[neck] - 1;
+                snakeY[head] = newY < 0 ? worldHeight - 1 : newY;
                 break;
         }
         if (snakeX[head] == appleX && snakeY[head] == appleY) {
@@ -68,7 +73,7 @@ public class Snake {
         } else {
             start++;
         }
-        return isDead;
+        return dead;
     }
 
     void newApple() {
@@ -92,11 +97,35 @@ public class Snake {
         direction = direction != Direction.UP ? Direction.DOWN : direction;
     }
 
-    public int getX(int i) {
+    int getBodyLength() {
+        return bodyLength;
+    }
+
+    int getWorldWidth() {
+        return worldWidth;
+    }
+
+    int getWorldHeight() {
+        return worldHeight;
+    }
+
+    int getAppleX() {
+        return appleX;
+    }
+
+    int getAppleY() {
+        return appleY;
+    }
+
+    boolean isDead() {
+        return dead;
+    }
+
+    int getX(int i) {
         return snakeX[start + i % maxBodyLength];
     }
 
-    public int getY(int i) {
+    int getY(int i) {
         return snakeY[start + i % maxBodyLength];
     }
 

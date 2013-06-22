@@ -23,8 +23,8 @@ public class SnakePanel extends JPanel {
         this.snake = snake;
         this.scale = scale;
         setPreferredSize(new Dimension(
-                snake.worldWidth * scale + 1,
-                snake.worldHeight * scale + 1));
+                snake.getWorldWidth() * scale + 1,
+                snake.getWorldHeight() * scale + 1));
         setOpaque(true);
         setBackground(BG_COLOR);
     }
@@ -41,21 +41,21 @@ public class SnakePanel extends JPanel {
         for (int j = 0; j < panelHeight; j += scale) {
             g.drawLine(0, j, panelWidth, j);
         }
-        if (!snake.isDead && snake.bodyLength > 0) {
+        if (!snake.isDead() && snake.getBodyLength() > 0) {
             g.setColor(SNAKE_COLOR);
             int xi, yi;
-            for (int i = 0; i < snake.bodyLength - 1; i++) {
+            for (int i = 0; i < snake.getBodyLength() - 1; i++) {
                 xi = snake.getX(i) * scale;
                 yi = snake.getY(i) * scale;
                 g.fillOval(xi, yi, scale, scale);
             }
             g.setColor(HEAD_COLOR);
-            xi = snake.getX(snake.bodyLength - 1) * scale;
-            yi = snake.getY(snake.bodyLength - 1) * scale;
+            xi = snake.getX(snake.getBodyLength() - 1) * scale;
+            yi = snake.getY(snake.getBodyLength() - 1) * scale;
             g.fillOval(xi, yi, scale, scale);
             g.setColor(APPLE_COLOR);
-            xi = snake.appleX * scale;
-            yi = snake.appleY * scale;
+            xi = snake.getAppleX() * scale;
+            yi = snake.getAppleY() * scale;
             g.fillOval(xi, yi, scale, scale);
         }
     }

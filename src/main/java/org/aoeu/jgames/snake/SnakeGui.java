@@ -85,7 +85,7 @@ public class SnakeGui extends JFrame {
                     wait(delay);
                 } catch (InterruptedException ignored) {
                 }
-                if (snake.isDead) {
+                if (snake.isDead()) {
                     JOptionPane.showMessageDialog(
                             null, "Ouch! suerte para la próxima.",
                             TITLE, JOptionPane.WARNING_MESSAGE);
