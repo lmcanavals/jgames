@@ -49,7 +49,7 @@ public class BreakoutGui {
                 try {
                     while (!breakout.gameOver) {
                         wait(DELAY);
-                        breakout.moverEsfera();
+                        breakout.moveSphere();
                         breakoutPanel.repaint();
                     }
                 } catch (InterruptedException ignored) {

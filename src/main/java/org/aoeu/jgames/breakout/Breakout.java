@@ -40,7 +40,7 @@ public class Breakout {
         gameOver = false;
     }
 
-    void moverEsfera() {
+    void moveSphere() {
         if (sphereTop + sphereDiam > barTop + barHeight) {
             gameOver = true;
         } else if (sphereTop + sphereDiam > barTop) {
